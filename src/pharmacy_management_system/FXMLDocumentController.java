@@ -20,7 +20,7 @@ public class FXMLDocumentController implements Initializable {
     private Label label;
     
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me! yooo");
+        System.out.println("You clicked me!");
         label.setText("Hello World!");
     }
     
