@@ -9,7 +9,24 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+
+
 
 /**
  *
@@ -17,11 +34,78 @@ import javafx.scene.control.Label;
  */
 public class FXMLDocumentController implements Initializable {
     
-    private Label label;
+    @FXML
+    private Button close;
+
+    @FXML
+    private Button loginbtn;
+
+    @FXML
+    private AnchorPane main_form;
+
+    @FXML
+    private PasswordField password;
+
+    @FXML
+    private TextField username;
     
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private PreparedStatement prepare;
+    private Connection connect;
+    private ResultSet result;
+    
+    public void loginAdmin(){
+        
+        String sql = "SELECT * FROM admin WHERE username = ? and password = ? ";
+        
+        connect = Database.connectDb();
+     try{
+     prepare = connect.prepareStatement(sql);
+     prepare.setString(1, username.getText());
+     prepare.setString(2, password.getText());
+     
+     result = prepare.executeQuery();
+     
+     Alert alert;
+     
+     if (username.getText().isEmpty() || password.getText().isEmpty()){
+       alert = new Alert (AlertType.ERROR);
+       alert.setTitle("Error Message");
+       alert.setHeaderText(null);
+       alert.setContentText("Please Fill All Blank Fields");
+       alert.showAndWait();
+   
+     }else{
+     
+     if(result.next()){
+         
+         alert = new Alert (AlertType.INFORMATION);
+       alert.setTitle("Information Message");
+       alert.setHeaderText(null);
+       alert.setContentText("Sucessfully Login");
+       alert.showAndWait();
+       
+       Parent root = FXMLLoader.load(getClass().getResource(""));
+       Stage stage = new Stage();
+       Scene scene = new Scene(root);
+       
+       stage.setScene(scene);
+       stage.show();
+     
+     }else{
+         alert = new Alert (AlertType.ERROR);
+       alert.setTitle("Error Message");
+       alert.setHeaderText(null);
+       alert.setContentText("Wrong username/password");
+       alert.showAndWait();
+     
+     }
+     }
+     }catch(Exception e){e.printStackTrace();}
+    }
+    
+    @FXML
+    public void close(){
+    System.exit(0);
     }
     
     @Override

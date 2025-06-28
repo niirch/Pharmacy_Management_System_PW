@@ -11,7 +11,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="492.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmacy_management_system.FXMLDocumentController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0">
          <children>
             <AnchorPane prefHeight="494.0" prefWidth="310.0" style="-fx-background-color: #CF4C57;">
                <children>
@@ -31,10 +31,10 @@
                         <Font name="Berlin Sans FB" size="17.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="95.0" layoutY="224.0" prefHeight="30.0" prefWidth="200.0" promptText="Username" />
-                  <PasswordField layoutX="96.0" layoutY="273.0" prefHeight="30.0" prefWidth="200.0" promptText="Password" />
-                  <Button layoutX="98.0" layoutY="334.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Login" textFill="#626e05" />
-                  <Button layoutX="336.0" layoutY="3.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="51.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="3.0">
+                  <TextField fx:id="username" layoutX="95.0" layoutY="224.0" prefHeight="30.0" prefWidth="200.0" promptText="Username" />
+                  <PasswordField fx:id="password" layoutX="96.0" layoutY="273.0" prefHeight="30.0" prefWidth="200.0" promptText="Password" />
+                  <Button fx:id="loginbtn" layoutX="98.0" layoutY="334.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Login" textFill="#626e05" />
+                  <Button fx:id="close" layoutX="336.0" layoutY="3.0" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="51.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="3.0">
                      <graphic>
                         <FontAwesomeIcon glyphName="CLOSE" />
                      </graphic>
