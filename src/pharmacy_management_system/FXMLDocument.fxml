@@ -31,9 +31,9 @@
                         <Font name="Berlin Sans FB" size="17.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="username" layoutX="95.0" layoutY="224.0" prefHeight="30.0" prefWidth="200.0" promptText="Username" />
-                  <PasswordField fx:id="password" layoutX="96.0" layoutY="273.0" prefHeight="30.0" prefWidth="200.0" promptText="Password" />
-                  <Button fx:id="loginbtn" layoutX="98.0" layoutY="334.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Login" textFill="#626e05" />
+                  <TextField fx:id="username" layoutX="95.0" layoutY="224.0" onAction="#loginAdmin" prefHeight="30.0" prefWidth="200.0" promptText="Username" />
+                  <PasswordField fx:id="password" layoutX="96.0" layoutY="273.0" onAction="#loginAdmin" prefHeight="30.0" prefWidth="200.0" promptText="Password" />
+                  <Button fx:id="loginbtn" layoutX="98.0" layoutY="334.0" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="40.0" prefWidth="200.0" text="Login" textFill="#626e05" />
                   <Button fx:id="close" layoutX="336.0" layoutY="3.0" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="51.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="3.0">
                      <graphic>
                         <FontAwesomeIcon glyphName="CLOSE" />
