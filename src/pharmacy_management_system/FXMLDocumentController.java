@@ -40,11 +40,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button loginbtn;
 
-    @FXML
-    private AnchorPane main_form;
 
     @FXML
-    private PasswordField password;
+    private TextField password;
 
     @FXML
     private TextField username;
@@ -53,6 +51,7 @@ public class FXMLDocumentController implements Initializable {
     private Connection connect;
     private ResultSet result;
     
+    @FXML
     public void loginAdmin(){
         
         String sql = "SELECT * FROM admin WHERE username = ? and password = ? ";
