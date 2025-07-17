@@ -166,7 +166,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .delete-btn:hover {
-    -fx-background-color: #b5343b;
+    -fx-background-color: #b5343b ;
 }
 .add-btn {
     -fx-background-color: #465372;
