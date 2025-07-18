@@ -60,23 +60,23 @@
                                     <Font name="Tahoma" size="17.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="userName" alignment="CENTER" layoutX="5.0" layoutY="165.0" prefHeight="23.0" prefWidth="189.0" text="NiiR Chowdhury" textFill="#fcfcfc">
+                              <Label fx:id="username" alignment="CENTER" layoutX="5.0" layoutY="165.0" prefHeight="23.0" prefWidth="189.0" text="NiiR Chowdhury" textFill="#fcfcfc">
                                  <font>
                                     <Font name="Arial Bold" size="20.0" />
                                  </font>
                               </Label>
                               <Line endX="77.09999084472656" endY="-1.52587890625E-5" layoutX="111.0" layoutY="205.0" startX="-100.0" stroke="WHITE" />
-                              <Button fx:id="dashboard_btn" layoutX="20.0" layoutY="234.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Dashboard">
+                              <Button fx:id="dashboard_btn" layoutX="20.0" layoutY="234.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Dashboard">
                                  <graphic>
                                     <FontAwesomeIcon fill="WHITE" glyphName="DASHBOARD" size="1.5em" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="addMed_btn" layoutX="20.0" layoutY="272.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Add Medicines">
+                              <Button fx:id="addMed_btn" layoutX="20.0" layoutY="272.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Add Medicines">
                                  <graphic>
                                     <FontAwesomeIcon fill="WHITE" glyphName="PLUS_CIRCLE" size="1.5em" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="purchase_btn" layoutX="20.0" layoutY="311.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="177.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Purchase Medicine">
+                              <Button fx:id="purchase_btn" layoutX="20.0" layoutY="311.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="31.0" prefWidth="177.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Purchase Medicine">
                                  <graphic>
                                     <FontAwesomeIcon fill="WHITE" glyphName="MONEY" size="1.5em" />
                                  </graphic>
@@ -130,13 +130,13 @@
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="addmedicine_type" layoutX="100.0" layoutY="138.0" prefHeight="26.0" prefWidth="142.0" promptText="Choose..." styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <ComboBox fx:id="addmedicine_type" layoutX="100.0" layoutY="138.0" onAction="#addMedicineListType" prefHeight="26.0" prefWidth="142.0" promptText="Choose..." styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <Label layoutX="291.0" layoutY="30.0" text="Status :">
                                        <font>
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="addmedicine_status" layoutX="341.0" layoutY="25.0" prefWidth="150.0" promptText="Choose..." styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <ComboBox fx:id="addmedicine_status" layoutX="341.0" layoutY="25.0" onAction="#addMedicineListStatus" prefWidth="150.0" promptText="Choose..." styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <Label layoutX="299.0" layoutY="70.0" text="Price :">
                                        <font>
                                           <Font name="Tahoma" size="12.0" />
@@ -152,8 +152,8 @@
                                           <ImageView fx:id="addmedicine_imageView" fitHeight="153.0" fitWidth="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                     </AnchorPane>
-                                    <Button fx:id="addmedicine_importBtn" layoutX="551.0" layoutY="177.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="87.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Import" />
-                                    <Button fx:id="addmedicine_addBtn" layoutX="714.0" layoutY="97.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
+                                    <Button fx:id="addmedicine_importBtn" layoutX="551.0" layoutY="177.0" mnemonicParsing="false" onAction="#addMedicineImportImage" prefHeight="26.0" prefWidth="87.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Import" />
+                                    <Button fx:id="addmedicine_addBtn" layoutX="714.0" layoutY="97.0" mnemonicParsing="false" onAction="#addMedicinesAdd" prefHeight="34.0" prefWidth="70.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
                                     <Button fx:id="addmedicine_updateBtn" layoutX="793.0" layoutY="97.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="Update" />
                                     <Button fx:id="addmedicine_clearBtn" layoutX="714.0" layoutY="145.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="clear-btn" stylesheets="@dashboardDesign.css" text="Clear" />
                                     <Button fx:id="addmedicine_deletBtn" layoutX="793.0" layoutY="145.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="delete-btn" stylesheets="@dashboardDesign.css" text="Delete" />
@@ -171,7 +171,7 @@
                                        </font>
                                     </TextField>
                                     <FontAwesomeIcon glyphName="SEARCH" layoutX="21.0" layoutY="30.0" size="1.2em" />
-                                    <TableView layoutX="14.0" layoutY="50.0" prefHeight="225.0" prefWidth="846.0">
+                                    <TableView fx:id="addMedicine_tableView" layoutX="14.0" layoutY="50.0" prefHeight="225.0" prefWidth="846.0">
                                       <columns>
                                         <TableColumn fx:id="addmedicine_co_medicineID" prefWidth="147.99998474121094" text="Medicine ID" />
                                         <TableColumn fx:id="addmedicine_co_brandName" prefWidth="148.0" text="Brand Name" />

@@ -122,7 +122,7 @@ public class dashboardContoller implements Initializable {
     private Label dashboard_totalIncome;
 
     @FXML
-    private Button logout_btn;
+    private Button logout;
 
     @FXML
     private AnchorPane main_form;
@@ -201,7 +201,7 @@ public class dashboardContoller implements Initializable {
 
             if (option.get().equals(ButtonType.OK)) {
                 
-                logout_btn.getScene().getWindow().hide();
+                logout.getScene().getWindow().hide();
                 
                 Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
 

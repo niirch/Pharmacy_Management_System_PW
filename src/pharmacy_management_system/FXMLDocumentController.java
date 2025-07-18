@@ -23,7 +23,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import static javafx.stage.StageStyle.TRANSPARENT;
 
 
 
@@ -51,6 +53,9 @@ public class FXMLDocumentController implements Initializable {
     private Connection connect;
     private ResultSet result;
     
+    private double x= 0;
+    private double y= 0;
+            
     @FXML
     public void loginAdmin(){
         
@@ -78,6 +83,7 @@ public class FXMLDocumentController implements Initializable {
      if(result.next()){
          
          alert = new Alert (AlertType.INFORMATION);
+         getData.username = username.getText();
        alert.setTitle("Information Message");
        alert.setHeaderText(null);
        alert.setContentText("Sucessfully Login");
@@ -90,6 +96,21 @@ public class FXMLDocumentController implements Initializable {
        Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
        Stage stage = new Stage();
        Scene scene = new Scene(root); 
+       
+       root.setOnMousePressed((MouseEvent event) -> {
+                    x = event.getSceneX();
+                    y = event.getScreenY();
+
+                });
+
+                root.setOnMouseDragged((MouseEvent event) -> {
+                    stage.setX(event.getScreenX() - x);
+                    stage.setY(event.getScreenY() - y);
+
+                    stage.setOpacity(.8);
+                });
+       
+       stage.initStyle(TRANSPARENT);
        
        stage.setScene(scene);
        stage.show();
