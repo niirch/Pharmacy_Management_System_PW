@@ -6,7 +6,7 @@ package pharmacy_management_system;
 
 import com.mysql.jdbc.Connection;
 //import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
+//import com.mysql.jdbc.Statement;
 import java.io.File;
 import java.net.URL;
 import java.util.Optional;
@@ -43,6 +43,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+//import java.sql.PreparedStatement;
+import java.sql.Statement;
+
 
 
 /**
@@ -166,15 +169,18 @@ public class DashboardController implements Initializable {
     private Image image;
     
     @FXML
-    public void addMedicinesAdd()
-{
+    public void addMedicinesAdd(){
+        
     String sql = "INSERT INTO medicine (medicine_id, brand, productName, type, status, price, image, date)"
     + "VALUES(?,?,?,?,?,?,?,?)";
     
+    
+    connect = (Connection) Database.connectDb();
     try {
-        
+
         Alert alert;
-        if(addmedicine_medicineID.getText().isEmpty()
+        
+                if(addmedicine_medicineID.getText().isEmpty()
                 || addmedicine_brandName.getText().isEmpty()
                 || addmedicine_productName.getText().isEmpty()
                 || addmedicine_type.getSelectionModel().getSelectedItem()== null
@@ -190,16 +196,17 @@ public class DashboardController implements Initializable {
         
         }else{
             
-            String checkData = "SELECT medicine_id FROM medicine WHERE medicine_id = '" +addmedicine_medicineID.getText()+ "'";
+            String checkData = "SELECT medicine_id FROM medicine WHERE medicine_id = '" +addmedicine_medicineID.getText()+"'";
             
             
               statement = connect.createStatement();
               result = statement.executeQuery(checkData);
-              if (result.next()) {
+              
+                  if (result.next()) {
                   alert = new Alert(AlertType.ERROR);
                   alert.setTitle("Error Message");
                   alert.setHeaderText(null);
-                  alert.setContentText("Medicine ID: " + addmedicine_medicineID.getText() + " was already exist! ");
+                  alert.setContentText("Medicine ID: " + addmedicine_medicineID.getText() + " was already exist!");
                   alert.showAndWait();
               }else{
               
@@ -207,8 +214,8 @@ public class DashboardController implements Initializable {
             prepare.setString(1, addmedicine_medicineID.getText());
             prepare.setString(2, addmedicine_brandName.getText());
             prepare.setString(3, addmedicine_productName.getText());
-            prepare.setString(4, (String) addmedicine_type.getSelectionModel().getSelectedItem());
-            prepare.setString(5, (String) addmedicine_status.getSelectionModel().getSelectedItem());
+            prepare.setString(4, (String)addmedicine_type.getSelectionModel().getSelectedItem());
+            prepare.setString(5, (String)addmedicine_status.getSelectionModel().getSelectedItem());
             prepare.setString(6, addmedicine_price.getText());
     
     
@@ -222,6 +229,7 @@ public class DashboardController implements Initializable {
          prepare.setString(8, String.valueOf(sqlDate));
          
          prepare.executeUpdate();
+         
          
          addMedicineShowListData();
         
@@ -252,27 +260,31 @@ public class DashboardController implements Initializable {
     
     
                private String[] addMedicineListT = {"Hydrocodone", "Antibiotics", "Metformin", "Losartan", "Albuterol"};
+     
+    
     @FXML
                public void addMedicineListType() {
                List<String> listT = new ArrayList<>();
                for (String data : addMedicineListT) {
                listT.add(data);
     }
-    ObservableList listData = FXCollections.observableArrayList(listT);
-    addmedicine_type.setItems(listData);
+               ObservableList listData = FXCollections.observableArrayList(listT);
+                addmedicine_type.setItems(listData);
          }
                
                
                
                private String[] addMedicineStatus = {"Available", "Not Available"};
+    
+   
     @FXML
               public void addMedicineListStatus() {
-                  List<String> listS = new ArrayList<>();
-               for (String data : addMedicineStatus) {
-               listS.add(data);
+              List<String> listS = new ArrayList<>();
+              for (String data : addMedicineStatus) {
+              listS.add(data);
     }
-    ObservableList listData = FXCollections.observableArrayList(listS);
-    addmedicine_status.setItems(listData);
+              ObservableList listData = FXCollections.observableArrayList(listS);
+              addmedicine_status.setItems(listData);
               }
     
     
@@ -323,6 +335,7 @@ public class DashboardController implements Initializable {
     
     private ObservableList<medicineData> addMedicineList;
 
+    @FXML
          public void addMedicineShowListData() {
           addMedicineList = addMedicinesListData();
           
