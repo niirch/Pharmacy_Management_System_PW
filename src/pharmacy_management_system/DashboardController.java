@@ -45,6 +45,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 //import java.sql.PreparedStatement;
 import java.sql.Statement;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 
 
 
@@ -169,11 +171,11 @@ public class DashboardController implements Initializable {
     private Image image;
     
     @FXML
+    
     public void addMedicinesAdd(){
         
     String sql = "INSERT INTO medicine (medicine_id, brand, productName, type, status, price, image, date)"
     + "VALUES(?,?,?,?,?,?,?,?)";
-    
     
     connect = (Connection) Database.connectDb();
     try {
@@ -198,6 +200,8 @@ public class DashboardController implements Initializable {
             
             String checkData = "SELECT medicine_id FROM medicine WHERE medicine_id = '" +addmedicine_medicineID.getText()+"'";
             
+            
+              
             
               statement = connect.createStatement();
               result = statement.executeQuery(checkData);
@@ -230,35 +234,147 @@ public class DashboardController implements Initializable {
          
          prepare.executeUpdate();
          
-         
-         addMedicineShowListData();
+                    alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Information Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Successfully Added!");
+                    alert.showAndWait();
+                    
+                    addMedicineShowListData();
+                    addMedicineReset();
         
               }
+            }
+          } catch (Exception e) {e.printStackTrace();}
+    
         }
+    
+    
+    @FXML
+    public void addMedicineUpdate(){
         
-    prepare = connect.prepareStatement(sql);
-    prepare.setString(1, addmedicine_medicineID.getText());
-    prepare.setString(2, addmedicine_brandName.getText());
-    prepare.setString(3, addmedicine_productName.getText());
-    prepare.setString(4, (String) addmedicine_type.getSelectionModel().getSelectedItem());
-    prepare.setString(5, (String) addmedicine_status.getSelectionModel().getSelectedItem());
-    prepare.setString(6, addmedicine_price.getText());
+        String uri = getData.path;
+        uri = uri.replace("\\", "\\\\");
+        
+        String sql = "UPDATE medicine SET brand = '"
+                +addmedicine_brandName.getText()+"', productName = '"
+                +addmedicine_productName.getText()+"', type = '"
+                +addmedicine_type.getSelectionModel().getSelectedItem()+"', status = '"
+                +addmedicine_status.getSelectionModel().getSelectedItem()+"', price = '"
+                +addmedicine_price.getText()+"', image = '"+uri+"' WHERE medicine_id = '"
+                +addmedicine_medicineID.getText()+"'";
+        
+        //connect = database.connectDb();
+        connect = (Connection) Database.connectDb();
+        
+            
+            try{
+            Alert alert;
+            
+                    if(addmedicine_medicineID.getText().isEmpty()
+                    || addmedicine_brandName.getText().isEmpty()
+                    || addmedicine_productName.getText().isEmpty()
+                    || addmedicine_type.getSelectionModel().getSelectedItem() == null
+                    || addmedicine_status.getSelectionModel().getSelectedItem() == null
+                    || addmedicine_price.getText().isEmpty()
+                    || getData.path == null || getData.path == ""){
+                        
+                    alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill all blank fields");
+                    alert.showAndWait();
+            }else{
+                alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to UPDATE Medicine ID:" + addmedicine_medicineID.getText() + "?");
+                Optional<ButtonType> option = alert.showAndWait();
+                
+                if(option.get().equals(ButtonType.OK)){
+                    statement = connect.createStatement();
+                    statement.executeUpdate(sql);
+                    
+                    alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Information Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Successfully Updated!");
+                    alert.showAndWait();
+                    
+                    addMedicineShowListData();
+                    addMedicineReset();
+                }
+            }
+        }catch(Exception e){e.printStackTrace();}
+    }
     
     
-    String uri = getData.path;
-    uri = uri.replace("\\", "\\\\");
+    @FXML
+        public void addMedicineDelete(){
+        
+        String sql = "DELETE FROM medicine WHERE medicine_id = '"+addmedicine_medicineID.getText()+"'";
+        
+        
+        connect = (Connection) Database.connectDb();
+        
+        try{
+            Alert alert;
+            
+            if(addmedicine_medicineID.getText().isEmpty()
+                    || addmedicine_brandName.getText().isEmpty()
+                    || addmedicine_productName.getText().isEmpty()
+                    || addmedicine_type.getSelectionModel().getSelectedItem() == null
+                    || addmedicine_status.getSelectionModel().getSelectedItem() == null
+                    || addmedicine_price.getText().isEmpty()
+                    || getData.path == null || getData.path == ""){
+                
+                    alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill all blank fields");
+                    alert.showAndWait();
+            }else{
+                alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to DELETE Medicine ID:" + addmedicine_medicineID.getText() + "?");
+                Optional<ButtonType> option = alert.showAndWait();
+                
+                if(option.get().equals(ButtonType.OK)){
+                    statement = connect.createStatement();
+                    statement.executeUpdate(sql);
+                    
+                    alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Information Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Successfully Deleted!");
+                    alert.showAndWait();
+                    
+                    addMedicineShowListData();
+                    addMedicineReset();
+                }
+            }
+        }catch(Exception e){e.printStackTrace();}
+    }
     
-         prepare.setString(7, uri);
-         Date date = new Date();
-         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-         
-         prepare.setString(8, String.valueOf(sqlDate));
     
-    
-} catch (Exception e) {e.printStackTrace();}
-}
-    
-    
+             public void addMedicineReset(){
+                 
+             addmedicine_medicineID.setText("");
+             addmedicine_brandName.setText("");
+             addmedicine_productName.setText("");
+             addmedicine_price.setText("");
+             addmedicine_type.getSelectionModel().clearSelection();
+             addmedicine_status.getSelectionModel().clearSelection();
+             
+             
+             addmedicine_imageView.setImage(null);
+             
+             getData.path = "";
+
+
+             }
+
                private String[] addMedicineListT = {"Hydrocodone", "Antibiotics", "Metformin", "Losartan", "Albuterol"};
      
     
@@ -335,7 +451,6 @@ public class DashboardController implements Initializable {
     
     private ObservableList<medicineData> addMedicineList;
 
-    @FXML
          public void addMedicineShowListData() {
           addMedicineList = addMedicinesListData();
           
@@ -350,7 +465,49 @@ public class DashboardController implements Initializable {
           addMedicine_tableView.setItems(addMedicineList);
           
 }
+         
+          public void addMedicineSearch(){
+        
+        FilteredList<medicineData> filter = new FilteredList<>(addMedicineList, e-> true);
+        
+        addmedicine_search.textProperty().addListener((Observable, oldValue, newValue) ->{
+            
+            filter.setPredicate(predicateMedicineData ->{
+                
+                if(newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+                
+                String searchKey = newValue.toLowerCase();
+                
+                if(predicateMedicineData.getMedicineId().toString().contains(searchKey)){
+                    return true;
+                }else if(predicateMedicineData.getBrand().toLowerCase().contains(searchKey)){
+                    return true;
+                }else if(predicateMedicineData.getProductName().toLowerCase().contains(searchKey)){
+                    return true;
+                }else if(predicateMedicineData.getType().toLowerCase().contains(searchKey)){
+                    return true;
+                }else if(predicateMedicineData.getStatus().toLowerCase().contains(searchKey)){
+                    return true;
+                }else if(predicateMedicineData.getPrice().toString().contains(searchKey)){
+                    return true;
+                }else if(predicateMedicineData.getDate().toString().contains(searchKey)){
+                    return true;
+                }else return false;
+            });
+        });
+        
+        SortedList<medicineData> sortList = new SortedList<>(filter);
+        
+        sortList.comparatorProperty().bind(addMedicine_tableView.comparatorProperty());
+        addMedicine_tableView.setItems(sortList);
+        
+    }
+         
+         
     
+    @FXML
     public void addMedicineSelect(){
         
         medicineData medData = addMedicine_tableView.getSelectionModel().getSelectedItem();
@@ -396,6 +553,7 @@ public class DashboardController implements Initializable {
            addMedicineShowListData();
            addMedicineListStatus();
            addMedicineListType();
+           addMedicineSearch();
         
         }else if(event.getSource()== purchase_btn){
             

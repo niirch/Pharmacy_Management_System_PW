@@ -154,9 +154,9 @@
                                     </AnchorPane>
                                     <Button fx:id="addmedicine_importBtn" layoutX="551.0" layoutY="177.0" mnemonicParsing="false" onAction="#addMedicineImportImage" prefHeight="26.0" prefWidth="87.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Import" />
                                     <Button fx:id="addmedicine_addBtn" layoutX="714.0" layoutY="97.0" mnemonicParsing="false" onAction="#addMedicinesAdd" prefHeight="34.0" prefWidth="70.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
-                                    <Button fx:id="addmedicine_updateBtn" layoutX="793.0" layoutY="97.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="Update" />
+                                    <Button fx:id="addmedicine_updateBtn" layoutX="793.0" layoutY="97.0" mnemonicParsing="false" onAction="#addMedicineUpdate" prefHeight="34.0" prefWidth="70.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="Update" />
                                     <Button fx:id="addmedicine_clearBtn" layoutX="714.0" layoutY="145.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="clear-btn" stylesheets="@dashboardDesign.css" text="Clear" />
-                                    <Button fx:id="addmedicine_deletBtn" layoutX="793.0" layoutY="145.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="70.0" styleClass="delete-btn" stylesheets="@dashboardDesign.css" text="Delete" />
+                                    <Button fx:id="addmedicine_deletBtn" layoutX="793.0" layoutY="145.0" mnemonicParsing="false" onAction="#addMedicineDelete" prefHeight="34.0" prefWidth="70.0" styleClass="delete-btn" stylesheets="@dashboardDesign.css" text="Delete" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane layoutX="14.0" layoutY="254.0" prefHeight="286.0" prefWidth="874.0" stylesheets="@dashboardDesign.css">
@@ -171,15 +171,15 @@
                                        </font>
                                     </TextField>
                                     <FontAwesomeIcon glyphName="SEARCH" layoutX="21.0" layoutY="30.0" size="1.2em" />
-                                    <TableView fx:id="addMedicine_tableView" layoutX="14.0" layoutY="50.0" onSort="#addMedicineShowListData" prefHeight="225.0" prefWidth="846.0">
+                                    <TableView fx:id="addMedicine_tableView" layoutX="14.0" layoutY="50.0" onMouseClicked="#addMedicineSelect" prefHeight="225.0" prefWidth="846.0">
                                       <columns>
-                                        <TableColumn fx:id="addmedicine_co_medicineID" prefWidth="147.99998474121094" text="Medicine ID" />
-                                        <TableColumn fx:id="addmedicine_co_brandName" prefWidth="148.0" text="Brand Name" />
-                                          <TableColumn fx:id="addmedicine_co_productsName" prefWidth="165.5999755859375" text="Product Name" />
-                                          <TableColumn fx:id="addmedicine_co_type" prefWidth="112.0" text="Type" />
-                                          <TableColumn fx:id="addmedicine_co_price" prefWidth="90.4000244140625" text="Price ($)" />
-                                          <TableColumn fx:id="addmedicine_co_status" prefWidth="92.79998779296875" text="Status" />
-                                          <TableColumn fx:id="addmedicine_co_date" prefWidth="89.59995117187498" text="Date" />
+                                        <TableColumn fx:id="addmedicine_co_medicineID" prefWidth="96.80001831054688" text="Medicine ID" />
+                                        <TableColumn fx:id="addmedicine_co_brandName" prefWidth="149.59994506835938" text="Brand Name" />
+                                          <TableColumn fx:id="addmedicine_co_productsName" prefWidth="142.39996337890625" text="Product Name" />
+                                          <TableColumn fx:id="addmedicine_co_type" prefWidth="128.79998779296875" text="Type" />
+                                          <TableColumn fx:id="addmedicine_co_price" prefWidth="108.0" text="Price ($)" />
+                                          <TableColumn fx:id="addmedicine_co_status" prefWidth="102.4000244140625" text="Status" />
+                                          <TableColumn fx:id="addmedicine_co_date" prefWidth="125.5999755859375" text="Date" />
                                       </columns>
                                     </TableView>
                                  </children>
