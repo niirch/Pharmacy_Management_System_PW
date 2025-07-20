@@ -619,6 +619,78 @@ public class DashboardController implements Initializable {
     }
     
     
+    private double balance;
+    private double amount;
+    @FXML
+    public void purchaseAmount(){
+        
+        if(purches_amount.getText().isEmpty() || totalPriceD == 0){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid :3");
+            alert.showAndWait();
+        }else{
+            amount = Double.parseDouble(purches_amount.getText());
+            if(totalPriceD > amount){
+                purches_amount.setText("");
+            }else{
+                balance = (amount - totalPriceD);
+                
+                purches_balance.setText("$"+String.valueOf(balance));
+            }
+        }
+        
+    } 
+           
+    @FXML
+        public void purchasePay(){
+        purchaseCustomerId();
+        String sql = "INSERT INTO customer_info (customer_id, total, date) "
+                + "VALUES(?,?,?)";
+        
+        connect = Database.connectDb();
+        
+        try{
+            Alert alert;
+            
+            if(totalPriceD == 0){
+                alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setContentText("Something wrong :3");
+                alert.showAndWait();
+            }else{
+                alert = new Alert(AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure?");
+                Optional<ButtonType> option = alert.showAndWait();
+                
+                if(option.get().equals(ButtonType.OK)){
+                
+                    prepare = connect.prepareStatement(sql);
+                    prepare.setString(1, String.valueOf(customerId));
+                    prepare.setString(2, String.valueOf(totalPriceD));
+
+                    Date date = new Date();
+                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                    prepare.setString(3, String.valueOf(sqlDate));
+
+                    prepare.executeUpdate();
+
+                    alert = new Alert(AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Successful!");
+                    alert.showAndWait();
+                    
+                    purches_amount.setText("");
+                    purches_balance.setText("$0.0");
+                }
+            }
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
     
     
     
