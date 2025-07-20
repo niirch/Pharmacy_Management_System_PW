@@ -4,7 +4,7 @@
  */
 package pharmacy_management_system;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 //import com.mysql.jdbc.PreparedStatement;
 //import com.mysql.jdbc.Statement;
 import java.io.File;
@@ -47,6 +47,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import java.sql.Statement;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 
 
 
@@ -114,6 +116,8 @@ public class DashboardController implements Initializable {
     @FXML
     private TableColumn<medicineData, String> addmedicine_co_date;
     @FXML
+    private Spinner<Integer> purchase_quantity;
+    @FXML
     private AnchorPane purches_from;
     @FXML
     private ComboBox<?> purches_type;
@@ -135,19 +139,19 @@ public class DashboardController implements Initializable {
     private Button purches_paybtn;
     
     @FXML
-    private TableView<?> purches_tableView;
+    private TableView<customerData> purches_tableView;
     @FXML
-    private TableColumn<?, ?> purches_co_medicineID;
+    private TableColumn<customerData, String> purches_co_medicineID;
     @FXML
-    private TableColumn<?, ?> purches_co_brandName;
+    private TableColumn<customerData, String> purches_co_brandName;
     @FXML
-    private TableColumn<?, ?> purches_co_productName;
+    private TableColumn<customerData, String> purches_co_productName;
     @FXML
-    private TableColumn<?, ?> purches_co_type;
+    private TableColumn<customerData, String> purches_co_type;
     @FXML
-    private TableColumn<?, ?> purches_co_quentity;
+    private TableColumn<customerData, String> purches_co_quentity;
     @FXML
-    private TableColumn<?, ?> purches_co_price;
+    private TableColumn<customerData, String> purches_co_price;
     @FXML
     private AnchorPane dashboard_form;
     @FXML
@@ -163,6 +167,9 @@ public class DashboardController implements Initializable {
     @FXML
     private Label username;
     
+    
+    
+    
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
@@ -170,14 +177,16 @@ public class DashboardController implements Initializable {
     
     private Image image;
     
+    
     @FXML
     
     public void addMedicinesAdd(){
         
     String sql = "INSERT INTO medicine (medicine_id, brand, productName, type, status, price, image, date)"
     + "VALUES(?,?,?,?,?,?,?,?)";
+ 
     
-    connect = (Connection) Database.connectDb();
+    connect = Database.connectDb();
     try {
 
         Alert alert;
@@ -264,8 +273,7 @@ public class DashboardController implements Initializable {
                 +addmedicine_price.getText()+"', image = '"+uri+"' WHERE medicine_id = '"
                 +addmedicine_medicineID.getText()+"'";
         
-        //connect = database.connectDb();
-        connect = (Connection) Database.connectDb();
+        connect = Database.connectDb();
         
             
             try{
@@ -315,7 +323,7 @@ public class DashboardController implements Initializable {
         String sql = "DELETE FROM medicine WHERE medicine_id = '"+addmedicine_medicineID.getText()+"'";
         
         
-        connect = (Connection) Database.connectDb();
+        connect = Database.connectDb();
         
         try{
             Alert alert;
@@ -425,7 +433,7 @@ public class DashboardController implements Initializable {
         
        ObservableList<medicineData> listData = FXCollections.observableArrayList();
        
-        connect = (Connection) Database.connectDb();
+        connect = Database.connectDb();
        
        try {
             prepare = connect.prepareStatement(sql);
@@ -466,6 +474,7 @@ public class DashboardController implements Initializable {
           
 }
          
+    @FXML
           public void addMedicineSearch(){
         
         FilteredList<medicineData> filter = new FilteredList<>(addMedicineList, e-> true);
@@ -528,6 +537,290 @@ public class DashboardController implements Initializable {
     
     }
     
+    private double totalP;
+    @FXML
+    public void purchaseAdd(){
+        purchaseCustomerId();
+        
+        String sql = "INSERT INTO customer (customer_id,type,medicine_id,brand,productName,quantity,price,date)"
+                + " VALUES(?,?,?,?,?,?,?,?)";
+        
+        connect = Database.connectDb();
+        
+        try{
+            Alert alert;
+            
+            if(purches_type.getSelectionModel().getSelectedItem() == null
+                    || purches_medicineID.getSelectionModel().getSelectedItem() == null
+                    || purches_brand.getSelectionModel().getSelectedItem() == null
+                    || purches_productName.getSelectionModel().getSelectedItem() == null){
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill all blank fields");
+                alert.showAndWait();
+            }else{
+                
+                prepare = connect.prepareStatement(sql);
+                prepare.setString(1, String.valueOf(customerId));
+                prepare.setString(2, (String)purches_type.getSelectionModel().getSelectedItem());
+                prepare.setString(3, (String)purches_medicineID.getSelectionModel().getSelectedItem());
+                prepare.setString(4, (String)purches_brand.getSelectionModel().getSelectedItem());
+                prepare.setString(5, (String)purches_productName .getSelectionModel().getSelectedItem());
+                prepare.setString(6, String.valueOf(qty));
+                
+                String checkData = "SELECT price FROM medicine WHERE medicine_id = '"
+                        +purches_medicineID.getSelectionModel().getSelectedItem()+"'";
+                
+                statement = connect.createStatement();
+                result = statement.executeQuery(checkData);
+                double priceD = 0;
+                if(result.next()){
+                    priceD = result.getDouble("price"); 
+                }
+                
+                totalP = (priceD * qty);
+                
+                prepare.setString(7, String.valueOf(totalP));
+                
+                Date date = new Date();
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                prepare.setString(8, String.valueOf(sqlDate));
+                
+                prepare.executeUpdate();
+                
+                purchaseShowListData();
+                purchaseDisplayTotal();
+            }
+            
+            prepare = connect.prepareStatement(sql);
+        }catch(Exception e){e.printStackTrace();}
+    }
+    
+    
+           private double totalPriceD;
+           public void purchaseDisplayTotal(){
+        
+        String sql = "SELECT SUM(price) FROM customer WHERE customer_id = '"+customerId+"'";
+        
+        connect = Database.connectDb();
+        
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            if(result.next()){
+                totalPriceD = result.getDouble("SUM(price)");
+            }
+            purches_total.setText("$" + String.valueOf(totalPriceD));
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    
+    
+    
+    
+        private SpinnerValueFactory<Integer> spinner;
+        public void purchaseShowValue(){
+        spinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 20, 0);
+        purchase_quantity.setValueFactory(spinner);
+              }
+    
+    private int qty;
+    @FXML
+    public void purchaseQuantity(){
+        qty = purchase_quantity.getValue();
+    }
+    
+    
+    
+    
+    
+    public ObservableList<customerData> purchaseListData(){
+        purchaseCustomerId();
+        
+        String sql = "SELECT * FROM customer WHERE customer_id = '"+customerId+"'";
+        
+        ObservableList<customerData> listData = FXCollections.observableArrayList();
+        
+        connect = Database.connectDb();
+        
+        try{
+            customerData customerD;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                customerD = new customerData(result.getInt("customer_id")
+                        , result.getString("type"), result.getInt("medicine_id")
+                        , result.getString("brand"), result.getString("productName")
+                        , result.getInt("quantity"), result.getDouble("price")
+                        , result.getDate("date"));
+                
+                listData.add(customerD); 
+            }
+            
+        }catch(Exception e){e.printStackTrace();}
+        return listData;
+    }
+    
+    
+    private ObservableList<customerData> purchaseList;
+    public void purchaseShowListData(){
+        purchaseList = purchaseListData();
+        
+        purches_co_medicineID.setCellValueFactory(new PropertyValueFactory<>("medicineId"));
+        purches_co_brandName.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        purches_co_productName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        purches_co_type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        purches_co_quentity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        purches_co_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        
+        purches_tableView.setItems(purchaseList); 
+        
+    } 
+    
+    
+    
+    
+    
+    private int customerId;
+    public void purchaseCustomerId(){
+        
+        String sql = "SELECT customer_id FROM customer";
+        
+        connect = Database.connectDb();
+        
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                customerId = result.getInt("customer_id");
+            }
+            int cID = 0;
+            String checkData = "SELECT customer_id FROM customer_info";
+            
+            statement = connect.createStatement();
+            result = statement.executeQuery(checkData);
+            
+            while(result.next()){
+                cID = result.getInt("customer_id");  
+            }
+            
+            if(customerId == 0){
+                customerId+=1;
+            }else if(cID == customerId){
+                customerId = cID+1;
+            }
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    
+    @FXML
+    public void purchaseType(){
+        
+        String sql = "SELECT type FROM medicine WHERE status = 'Available'";
+        
+        
+        connect = Database.connectDb();
+        
+        try{
+            ObservableList listData = FXCollections.observableArrayList();
+            
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                listData.add(result.getString("type"));
+            }
+            purches_type.setItems(listData);
+            
+            purchaseMedicineId();
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    
+    @FXML
+    public void purchaseMedicineId(){
+        
+        String sql = "SELECT * FROM medicine WHERE type = '"
+                +purches_type.getSelectionModel().getSelectedItem()+"'";
+        
+        connect = Database.connectDb();
+        
+        try{
+            ObservableList listData = FXCollections.observableArrayList();
+            
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                listData.add(result.getString("medicine_id"));
+            }
+            purches_medicineID.setItems(listData);
+            
+            purchaseBrand();
+        }catch(Exception e){e.printStackTrace();}
+    }
+    
+    
+    @FXML
+    public void purchaseBrand(){
+        
+        String sql = "SELECT * FROM medicine WHERE medicine_id = '"
+                +purches_medicineID.getSelectionModel().getSelectedItem()+"'";
+        
+        connect = Database.connectDb(); 
+        
+        try{
+            ObservableList listData = FXCollections.observableArrayList();
+            
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                listData.add(result.getString("brand"));
+            }
+            purches_brand.setItems(listData);
+            
+            purchaseProductName();
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    
+    @FXML
+    public void purchaseProductName(){
+        
+        String sql = "SELECT * FROM medicine WHERE brand = '"
+                +purches_brand .getSelectionModel().getSelectedItem()+"'";
+        
+        connect = Database.connectDb();
+        
+        try{
+            ObservableList listData = FXCollections.observableArrayList();
+            
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                listData.add(result.getString("productName"));
+            }
+            purches_productName.setItems(listData);
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    
+    
     @FXML
     public void switchForm( ActionEvent event ){
         if(event.getSource()== dashboard_btn){
@@ -564,6 +857,14 @@ public class DashboardController implements Initializable {
            purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
            dashboard_btn.setStyle("-fx-background-color:transparent");
            addMed_btn.setStyle("-fx-background-color:transparent");
+           
+           purchaseType();
+           purchaseMedicineId();
+           purchaseBrand();
+           purchaseProductName();
+           purchaseShowListData();
+           purchaseShowValue();
+           purchaseDisplayTotal();
         
         }
     
@@ -623,11 +924,11 @@ public class DashboardController implements Initializable {
                 stage.show();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {e.printStackTrace();}
     }
 
+    
+    
     @FXML
     public void minimize() {
         Stage stage = (Stage) main_form.getScene().getWindow();
@@ -646,6 +947,14 @@ public class DashboardController implements Initializable {
         addMedicineShowListData();
         addMedicineListStatus();
         addMedicineListType();
+        
+        purchaseType();
+        purchaseMedicineId();
+        purchaseBrand();
+        purchaseProductName();
+        purchaseShowListData();
+        purchaseShowValue();
+        purchaseDisplayTotal();
 
     }
 

@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -200,53 +201,59 @@
                                           <Font name="Tahoma" size="15.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="purches_type" layoutX="114.0" layoutY="15.0" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <ComboBox fx:id="purches_type" layoutX="115.0" layoutY="15.0" onAction="#purchaseType" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <Label layoutX="20.0" layoutY="60.0" prefHeight="19.0" prefWidth="87.0" text="Medicine ID:">
                                        <font>
                                           <Font name="Tahoma" size="15.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="purches_medicineID" layoutX="114.0" layoutY="57.0" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <ComboBox fx:id="purches_medicineID" layoutX="114.0" layoutY="57.0" onAction="#purchaseMedicineId" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <Label layoutX="61.0" layoutY="105.0" text="Brand:">
                                        <font>
                                           <Font name="Tahoma" size="15.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="purches_brand" layoutX="114.0" layoutY="102.0" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <ComboBox fx:id="purches_brand" layoutX="114.0" layoutY="102.0" onAction="#purchaseBrand" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <Label layoutX="7.0" layoutY="147.0" prefHeight="19.0" prefWidth="101.0" text="Product Name:">
                                        <font>
                                           <Font name="Tahoma" size="15.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="purches_productName" layoutX="114.0" layoutY="144.0" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
-                                    <Button fx:id="purches_addbtn" layoutX="134.0" layoutY="194.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="126.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add to Cart" />
-                                    <Label layoutX="86.0" layoutY="279.0" text="Total:">
+                                    <ComboBox fx:id="purches_productName" layoutX="114.0" layoutY="144.0" onAction="#purchaseProductName" prefWidth="150.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <Spinner fx:id="purchase_quantity" layoutX="115.0" layoutY="188.0" onMouseClicked="#purchaseQuantity" prefHeight="26.0" prefWidth="86.0" />
+                                    <Button fx:id="purches_addbtn" layoutX="132.0" layoutY="245.0" mnemonicParsing="false" onAction="#purchaseAdd" prefHeight="40.0" prefWidth="126.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add to Cart" />
+                                    <Label layoutX="85.0" layoutY="333.0" text="Total:">
                                        <font>
                                           <Font name="Tahoma Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="purches_total" layoutX="137.0" layoutY="279.0" prefHeight="19.0" prefWidth="117.0" text="\$0.0">
+                                    <Label fx:id="purches_total" layoutX="136.0" layoutY="333.0" prefHeight="19.0" prefWidth="117.0" text="\$0.0">
                                        <font>
                                           <Font name="Tahoma Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <Label layoutX="65.0" layoutY="309.0" text="Amount:">
+                                    <Label layoutX="64.0" layoutY="363.0" text="Amount:">
                                        <font>
                                           <Font name="Tahoma Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="purches_amount" layoutX="137.0" layoutY="306.0" prefHeight="26.0" prefWidth="96.0" promptText="\$0.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
-                                    <Label layoutX="65.0" layoutY="343.0" text="Balance:">
+                                    <TextField fx:id="purches_amount" layoutX="136.0" layoutY="360.0" prefHeight="26.0" prefWidth="96.0" promptText="\$0.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <Label layoutX="64.0" layoutY="397.0" text="Balance:">
                                        <font>
                                           <Font name="Tahoma Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="purches_balance" layoutX="138.0" layoutY="344.0" prefHeight="19.0" prefWidth="117.0" text="\$0.0">
+                                    <Label fx:id="purches_balance" layoutX="137.0" layoutY="398.0" prefHeight="19.0" prefWidth="117.0" text="\$0.0">
                                        <font>
                                           <Font name="Tahoma Bold" size="15.0" />
                                        </font>
                                     </Label>
                                     <Button fx:id="purches_paybtn" layoutX="13.0" layoutY="443.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Pay" />
+                                    <Label layoutX="45.0" layoutY="191.0" prefHeight="19.0" prefWidth="65.0" text="Quantity:">
+                                       <font>
+                                          <Font name="Tahoma" size="15.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                                  <styleClass>
                                     <String fx:value="white-bg" />
@@ -260,7 +267,7 @@
                                     <TableColumn fx:id="purches_co_productName" prefWidth="94.39996337890625" text="Product Name" />
                                     <TableColumn fx:id="purches_co_type" text="Type" />
                                     <TableColumn fx:id="purches_co_quentity" prefWidth="101.60003662109375" text="Quentity" />
-                                    <TableColumn fx:id="purches_co_price" prefWidth="116.0" text="Price (BDT)" />
+                                    <TableColumn fx:id="purches_co_price" prefWidth="116.0" text="Price ($)" />
                                 </columns>
                               </TableView>
                            </children>
