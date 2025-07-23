@@ -187,7 +187,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="purches_from" layoutX="14.0" layoutY="14.0" prefHeight="530.0" prefWidth="873.0" stylesheets="@dashboardDesign.css">
+                        <AnchorPane fx:id="purches_from" layoutX="14.0" layoutY="14.0" prefHeight="530.0" prefWidth="873.0" stylesheets="@dashboardDesign.css" visible="false">
                            <styleClass>
                               <String fx:value="white-bg" />
                               <String fx:value="shadow" />
@@ -272,7 +272,7 @@
                               </TableView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="dashboard_form" layoutX="187.0" layoutY="167.0" prefHeight="558.4" prefWidth="905.6" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="dashboard_form" layoutX="187.0" layoutY="167.0" prefHeight="558.4" prefWidth="905.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="339.0" prefWidth="874.0" stylesheets="@dashboardDesign.css">
                                  <children>

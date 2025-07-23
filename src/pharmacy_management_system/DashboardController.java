@@ -47,6 +47,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import java.sql.Statement;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 
@@ -176,6 +177,93 @@ public class DashboardController implements Initializable {
     private ResultSet result;
     
     private Image image;
+    
+    
+    public void homeChart(){
+        dashboard_chart.getData().clear();
+        
+        String sql = "SELECT date, SUM(total) FROM customer_info"
+                + " GROUP BY date ORDER BY TIMESTAMP(date) ASC LIMIT 9";
+        
+        connect = Database.connectDb();
+        
+        try{
+            XYChart.Series chart = new XYChart.Series();
+            
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                chart.getData().add(new XYChart.Data(result.getString(1), result.getInt(2)));
+            }
+            
+            dashboard_chart.getData().add(chart);
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    
+    public void homeAM(){
+        
+        String sql = "SELECT COUNT(id) FROM medicine WHERE status = 'Available'";
+        
+        connect = Database.connectDb();
+        int countAM = 0;
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                countAM = result.getInt("COUNT(id)");
+            }
+            
+            dashboard_availableMedicine.setText(String.valueOf(countAM));
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    public void homeTI(){
+        String sql = "SELECT SUM(total) FROM customer_info";
+        
+        connect = Database.connectDb();
+        double totalDisplay = 0;
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                totalDisplay = result.getDouble("SUM(total)");
+            }
+            
+            dashboard_totalIncome.setText("$" + String.valueOf(totalDisplay));
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
+    public void homeTC(){
+        
+        String sql = "SELECT COUNT(id) FROM customer_info";
+        
+        connect = Database.connectDb();
+        int countTC = 0;
+        
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            
+            while(result.next()){
+                countTC = result.getInt("COUNT(id)");
+            }
+            
+            dashboard_totalCustomer.setText(String.valueOf(countTC));
+            
+        }catch(Exception e){e.printStackTrace();}
+        
+    }
+    
     
     
     @FXML
@@ -904,6 +992,12 @@ public class DashboardController implements Initializable {
            addMed_btn.setStyle("-fx-background-color:transparent");
            purchase_btn.setStyle("-fx-background-color:transparent");
            
+           homeChart();
+           homeAM();
+           homeTI();
+           homeTC();
+
+           
            
         }else if(event.getSource()== addMed_btn){
             
@@ -1015,6 +1109,12 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         displayUsername(); 
+        
+        homeChart();
+        homeAM();
+        homeTI();
+        homeTC();
+        
         
         addMedicineShowListData();
         addMedicineListStatus();
