@@ -222,6 +222,11 @@
                               <AnchorPane layoutX="-1.0" prefHeight="544.0" prefWidth="892.0" />
                               <AnchorPane layoutX="602.0" prefHeight="530.0" prefWidth="273.0" stylesheets="@dashboardDesign.css">
                                  <children>
+                                    <ImageView fitHeight="529.0" fitWidth="274.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Image/pay.png" />
+                                       </image>
+                                    </ImageView>
                                     <Label layoutX="70.0" layoutY="18.0" text="Type:">
                                        <font>
                                           <Font name="Tahoma" size="15.0" />
