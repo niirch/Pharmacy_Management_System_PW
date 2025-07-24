@@ -17,6 +17,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
@@ -55,35 +58,35 @@
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <AnchorPane layoutY="140.0" prefHeight="554.4" prefWidth="200.0" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <styleClass>
+                              <String fx:value="nav-form" />
+                              <String fx:value="shadow" />
+                           </styleClass>
                            <children>
-                              <FontAwesomeIcon fill="#f2eaea" glyphName="USER_MD" layoutX="62.0" layoutY="112.0" size="8em" />
-                              <Label layoutX="61.0" layoutY="133.0" text="WELCOME" textFill="#fcfcfc">
-                                 <font>
-                                    <Font name="Tahoma" size="17.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="username" alignment="CENTER" layoutX="5.0" layoutY="165.0" prefHeight="23.0" prefWidth="189.0" text="NiiR Chowdhury" textFill="#fcfcfc">
-                                 <font>
-                                    <Font name="Arial Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <Line endX="77.09999084472656" endY="-1.52587890625E-5" layoutX="111.0" layoutY="205.0" startX="-100.0" stroke="WHITE" />
-                              <Button fx:id="dashboard_btn" layoutX="20.0" layoutY="234.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Dashboard">
-                                 <graphic>
-                                    <FontAwesomeIcon fill="WHITE" glyphName="DASHBOARD" size="1.5em" />
-                                 </graphic>
-                              </Button>
-                              <Button fx:id="addMed_btn" layoutX="20.0" layoutY="272.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Add Medicines">
-                                 <graphic>
-                                    <FontAwesomeIcon fill="WHITE" glyphName="PLUS_CIRCLE" size="1.5em" />
-                                 </graphic>
-                              </Button>
-                              <Button fx:id="purchase_btn" layoutX="20.0" layoutY="311.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="31.0" prefWidth="177.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Purchase Medicine">
-                                 <graphic>
-                                    <FontAwesomeIcon fill="WHITE" glyphName="MONEY" size="1.5em" />
-                                 </graphic>
-                              </Button>
-                              <Button fx:id="logout_btn" layoutX="14.0" layoutY="508.0" mnemonicParsing="false" onAction="#logout" stylesheets="@dashboardDesign.css">
+                              <ImageView fitHeight="560.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Image/them.png" />
+                                 </image>
+                              </ImageView>
+                              <FontAwesomeIcon glyphName="USER_MD" layoutX="62.0" layoutY="119.0" size="8em">
+                                 <fill>
+                                    <LinearGradient endX="1.0" endY="1.0">
+                                       <stops>
+                                          <Stop>
+                                             <color>
+                                                <Color red="0.7439798712730408" green="0.43372321128845215" blue="0.9368420839309692" />
+                                             </color>
+                                          </Stop>
+                                          <Stop offset="1.0">
+                                             <color>
+                                                <Color red="1.0" green="1.0" blue="1.0" />
+                                             </color>
+                                          </Stop>
+                                       </stops>
+                                    </LinearGradient>
+                                 </fill>
+                              </FontAwesomeIcon>
+                              <Button fx:id="logout_btn" layoutX="14.0" layoutY="512.0" mnemonicParsing="false" onAction="#logout" stylesheets="@dashboardDesign.css">
                                  <graphic>
                                     <FontAwesomeIcon fill="#efe7e7" glyphName="SIGN_OUT" size="2em" styleClass="shadow" />
                                  </graphic>
@@ -92,12 +95,34 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                               </Button>
-                              <Label layoutX="63.0" layoutY="516.0" text="Sign Out" textFill="#f4f4f4" />
+                              <Label layoutX="57.0" layoutY="517.0" text="Sign Out" textFill="#2e2e2e" />
+                              <Button fx:id="dashboard_btn" layoutX="14.0" layoutY="231.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Dashboard" textFill="#e33aef">
+                                 <graphic>
+                                    <FontAwesomeIcon fill="WHITE" glyphName="DASHBOARD" size="1.5em" />
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="username" alignment="CENTER" layoutX="3.0" layoutY="173.0" prefHeight="23.0" prefWidth="189.0" text="NiiR Chowdhury" textFill="#5b86b2">
+                                 <font>
+                                    <Font name="Arial Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="purchase_btn" layoutX="14.0" layoutY="312.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="31.0" prefWidth="177.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Purchase Medicine">
+                                 <graphic>
+                                    <FontAwesomeIcon fill="WHITE" glyphName="MONEY" size="1.5em" />
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="addMed_btn" layoutX="14.0" layoutY="270.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="160.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Add Medicines">
+                                 <graphic>
+                                    <FontAwesomeIcon fill="WHITE" glyphName="PLUS_CIRCLE" size="1.5em" />
+                                 </graphic>
+                              </Button>
+                              <Line endX="77.09999084472656" endY="-1.52587890625E-5" layoutX="118.0" layoutY="208.0" startX="-100.0" stroke="WHITE" />
+                              <Label layoutX="61.0" layoutY="139.0" text="WELCOME" textFill="#5c70ae">
+                                 <font>
+                                    <Font name="Tahoma" size="17.0" />
+                                 </font>
+                              </Label>
                            </children>
-                           <styleClass>
-                              <String fx:value="nav-form" />
-                              <String fx:value="shadow" />
-                           </styleClass>
                         </AnchorPane>
                      </children>
                   </AnchorPane>
@@ -352,7 +377,7 @@
                                                 <Image url="@Image/wave3.png" />
                                              </image>
                                           </ImageView>
-                                          <FontAwesomeIcon fill="#7c87d6" glyphName="USERS" layoutX="19.0" layoutY="99.0" size="4.2em" />
+                                          <FontAwesomeIcon fill="#7c87d6" glyphName="USERS" layoutX="19.0" layoutY="101.0" size="4.2em" />
                                           <Label layoutX="73.0" layoutY="130.0" text="Total Customers" textFill="#191a20">
                                              <font>
                                                 <Font name="Tahoma Bold" size="15.0" />
