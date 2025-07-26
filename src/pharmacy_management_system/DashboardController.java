@@ -1,13 +1,13 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
+ * Click nbproject/project.properties to edit this template
  */
 package pharmacy_management_system;
 
 import java.sql.Connection;
-//import com.mysql.jdbc.PreparedStatement;
-//import com.mysql.jdbc.Statement;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -43,15 +43,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-//import java.sql.PreparedStatement;
 import java.sql.Statement;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-
-
+import java.awt.Desktop;
 
 /**
  * FXML Controller class
@@ -168,16 +166,12 @@ public class DashboardController implements Initializable {
     @FXML
     private Label username;
     
-    
-    
-    
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
     private ResultSet result;
     
     private Image image;
-    
     
     public void homeChart(){
         dashboard_chart.getData().clear();
@@ -200,12 +194,9 @@ public class DashboardController implements Initializable {
             dashboard_chart.getData().add(chart);
             
         }catch(Exception e){e.printStackTrace();}
-        
     }
     
-    
     public void homeAM(){
-        
         String sql = "SELECT COUNT(id) FROM medicine WHERE status = 'Available'";
         
         connect = Database.connectDb();
@@ -221,7 +212,6 @@ public class DashboardController implements Initializable {
             dashboard_availableMedicine.setText(String.valueOf(countAM));
             
         }catch(Exception e){e.printStackTrace();}
-        
     }
     
     public void homeTI(){
@@ -240,11 +230,9 @@ public class DashboardController implements Initializable {
             dashboard_totalIncome.setText("$" + String.valueOf(totalDisplay));
             
         }catch(Exception e){e.printStackTrace();}
-        
     }
     
     public void homeTC(){
-        
         String sql = "SELECT COUNT(id) FROM customer_info";
         
         connect = Database.connectDb();
@@ -261,76 +249,61 @@ public class DashboardController implements Initializable {
             dashboard_totalCustomer.setText(String.valueOf(countTC));
             
         }catch(Exception e){e.printStackTrace();}
-        
     }
     
-    
-    
     @FXML
-    
     public void addMedicinesAdd(){
+        String sql = "INSERT INTO medicine (medicine_id, brand, productName, type, status, price, image, date)"
+                + " VALUES(?,?,?,?,?,?,?,?)";
         
-    String sql = "INSERT INTO medicine (medicine_id, brand, productName, type, status, price, image, date)"
-    + "VALUES(?,?,?,?,?,?,?,?)";
- 
-    
-    connect = Database.connectDb();
-    try {
-
-        Alert alert;
-        
-                if(addmedicine_medicineID.getText().isEmpty()
-                || addmedicine_brandName.getText().isEmpty()
-                || addmedicine_productName.getText().isEmpty()
-                || addmedicine_type.getSelectionModel().getSelectedItem()== null
-                || addmedicine_status.getSelectionModel().getSelectedItem()== null
-                || addmedicine_price.getText().isEmpty()
-                || getData.path == null || getData.path == "" ){
-        
-              alert = new Alert(AlertType.ERROR);
-              alert.setTitle("Error Message");
-              alert.setHeaderText(null);
-              alert.setContentText("Please fill all blank fields");
-              alert.showAndWait();
-        
-        }else{
+        connect = Database.connectDb();
+        try {
+            Alert alert;
             
-            String checkData = "SELECT medicine_id FROM medicine WHERE medicine_id = '" +addmedicine_medicineID.getText()+"'";
-            
-            
-              
-            
-              statement = connect.createStatement();
-              result = statement.executeQuery(checkData);
-              
-                  if (result.next()) {
-                  alert = new Alert(AlertType.ERROR);
-                  alert.setTitle("Error Message");
-                  alert.setHeaderText(null);
-                  alert.setContentText("Medicine ID: " + addmedicine_medicineID.getText() + " was already exist!");
-                  alert.showAndWait();
-              }else{
-              
-            prepare = connect.prepareStatement(sql);
-            prepare.setString(1, addmedicine_medicineID.getText());
-            prepare.setString(2, addmedicine_brandName.getText());
-            prepare.setString(3, addmedicine_productName.getText());
-            prepare.setString(4, (String)addmedicine_type.getSelectionModel().getSelectedItem());
-            prepare.setString(5, (String)addmedicine_status.getSelectionModel().getSelectedItem());
-            prepare.setString(6, addmedicine_price.getText());
-    
-    
-    String uri = getData.path;
-    uri = uri.replace("\\", "\\\\");
-    
-         prepare.setString(7, uri);
-         Date date = new Date();
-         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-         
-         prepare.setString(8, String.valueOf(sqlDate));
-         
-         prepare.executeUpdate();
-         
+            if(addmedicine_medicineID.getText().isEmpty()
+                    || addmedicine_brandName.getText().isEmpty()
+                    || addmedicine_productName.getText().isEmpty()
+                    || addmedicine_type.getSelectionModel().getSelectedItem()== null
+                    || addmedicine_status.getSelectionModel().getSelectedItem()== null
+                    || addmedicine_price.getText().isEmpty()
+                    || getData.path == null || getData.path == "" ){
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill all blank fields");
+                alert.showAndWait();
+            }else{
+                String checkData = "SELECT medicine_id FROM medicine WHERE medicine_id = '" +addmedicine_medicineID.getText()+"'";
+                
+                statement = connect.createStatement();
+                result = statement.executeQuery(checkData);
+                
+                if (result.next()) {
+                    alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Medicine ID: " + addmedicine_medicineID.getText() + " was already exist!");
+                    alert.showAndWait();
+                }else{
+                    prepare = connect.prepareStatement(sql);
+                    prepare.setString(1, addmedicine_medicineID.getText());
+                    prepare.setString(2, addmedicine_brandName.getText());
+                    prepare.setString(3, addmedicine_productName.getText());
+                    prepare.setString(4, (String)addmedicine_type.getSelectionModel().getSelectedItem());
+                    prepare.setString(5, (String)addmedicine_status.getSelectionModel().getSelectedItem());
+                    prepare.setString(6, addmedicine_price.getText());
+                    
+                    String uri = getData.path;
+                    uri = uri.replace("\\", "\\\\");
+                    
+                    prepare.setString(7, uri);
+                    Date date = new Date();
+                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                    
+                    prepare.setString(8, String.valueOf(sqlDate));
+                    
+                    prepare.executeUpdate();
+                    
                     alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
@@ -339,17 +312,13 @@ public class DashboardController implements Initializable {
                     
                     addMedicineShowListData();
                     addMedicineReset();
-        
-              }
+                }
             }
-          } catch (Exception e) {e.printStackTrace();}
-    
-        }
-    
+        } catch (Exception e) {e.printStackTrace();}
+    }
     
     @FXML
     public void addMedicineUpdate(){
-        
         String uri = getData.path;
         uri = uri.replace("\\", "\\\\");
         
@@ -363,23 +332,21 @@ public class DashboardController implements Initializable {
         
         connect = Database.connectDb();
         
-            
-            try{
+        try{
             Alert alert;
             
-                    if(addmedicine_medicineID.getText().isEmpty()
+            if(addmedicine_medicineID.getText().isEmpty()
                     || addmedicine_brandName.getText().isEmpty()
                     || addmedicine_productName.getText().isEmpty()
                     || addmedicine_type.getSelectionModel().getSelectedItem() == null
                     || addmedicine_status.getSelectionModel().getSelectedItem() == null
                     || addmedicine_price.getText().isEmpty()
                     || getData.path == null || getData.path == ""){
-                        
-                    alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill all blank fields");
-                    alert.showAndWait();
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill all blank fields");
+                alert.showAndWait();
             }else{
                 alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Message");
@@ -404,12 +371,9 @@ public class DashboardController implements Initializable {
         }catch(Exception e){e.printStackTrace();}
     }
     
-    
     @FXML
-        public void addMedicineDelete(){
-        
+    public void addMedicineDelete(){
         String sql = "DELETE FROM medicine WHERE medicine_id = '"+addmedicine_medicineID.getText()+"'";
-        
         
         connect = Database.connectDb();
         
@@ -423,12 +387,11 @@ public class DashboardController implements Initializable {
                     || addmedicine_status.getSelectionModel().getSelectedItem() == null
                     || addmedicine_price.getText().isEmpty()
                     || getData.path == null || getData.path == ""){
-                
-                    alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill all blank fields");
-                    alert.showAndWait();
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill all blank fields");
+                alert.showAndWait();
             }else{
                 alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Message");
@@ -453,124 +416,101 @@ public class DashboardController implements Initializable {
         }catch(Exception e){e.printStackTrace();}
     }
     
-    
-             public void addMedicineReset(){
-                 
-             addmedicine_medicineID.setText("");
-             addmedicine_brandName.setText("");
-             addmedicine_productName.setText("");
-             addmedicine_price.setText("");
-             addmedicine_type.getSelectionModel().clearSelection();
-             addmedicine_status.getSelectionModel().clearSelection();
-             
-             
-             addmedicine_imageView.setImage(null);
-             
-             getData.path = "";
-
-
-             }
-
-               private String[] addMedicineListT = {"Hydrocodone", "Antibiotics", "Metformin", "Losartan", "Albuterol"};
-     
-    
-    @FXML
-               public void addMedicineListType() {
-               List<String> listT = new ArrayList<>();
-               for (String data : addMedicineListT) {
-               listT.add(data);
+    public void addMedicineReset(){
+        addmedicine_medicineID.setText("");
+        addmedicine_brandName.setText("");
+        addmedicine_productName.setText("");
+        addmedicine_price.setText("");
+        addmedicine_type.getSelectionModel().clearSelection();
+        addmedicine_status.getSelectionModel().clearSelection();
+        
+        addmedicine_imageView.setImage(null);
+        getData.path = "";
     }
-               ObservableList listData = FXCollections.observableArrayList(listT);
-                addmedicine_type.setItems(listData);
-         }
-               
-               
-               
-               private String[] addMedicineStatus = {"Available", "Not Available"};
     
-   
+    private String[] addMedicineListT = {"Hydrocodone", "Antibiotics", "Metformin", "Losartan", "Albuterol"};
+    
     @FXML
-              public void addMedicineListStatus() {
-              List<String> listS = new ArrayList<>();
-              for (String data : addMedicineStatus) {
-              listS.add(data);
+    public void addMedicineListType() {
+        List<String> listT = new ArrayList<>();
+        for (String data : addMedicineListT) {
+            listT.add(data);
+        }
+        ObservableList listData = FXCollections.observableArrayList(listT);
+        addmedicine_type.setItems(listData);
     }
-              ObservableList listData = FXCollections.observableArrayList(listS);
-              addmedicine_status.setItems(listData);
-              }
     
+    private String[] addMedicineStatus = {"Available", "Not Available"};
     
     @FXML
-     public void addMedicineImportImage() {
-    FileChooser open = new FileChooser();
-    open.setTitle("Import Image File");
-    open.getExtensionFilters().add(new ExtensionFilter("Image File", "*.jpg", "*.png"));
-    File file = open.showOpenDialog(main_form.getScene().getWindow());
+    public void addMedicineListStatus() {
+        List<String> listS = new ArrayList<>();
+        for (String data : addMedicineStatus) {
+            listS.add(data);
+        }
+        ObservableList listData = FXCollections.observableArrayList(listS);
+        addmedicine_status.setItems(listData);
+    }
     
-    if(file != null) {
-    image = new Image(file.toURI().toString(), 113, 153, false, true);
-    addmedicine_imageView.setImage(image);
-    getData.path = file.getAbsolutePath();
-}
-}
-    
+    @FXML
+    public void addMedicineImportImage() {
+        FileChooser open = new FileChooser();
+        open.setTitle("Choose an Image File");
+        open.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.jpg", "*.png"));
+        File file = open.showOpenDialog(main_form.getScene().getWindow());
+        
+        if(file != null) {
+            image = new Image(file.toURI().toString(), 113, 153, false, true);
+            addmedicine_imageView.setImage(image);
+            getData.path = file.getAbsolutePath();
+        }
+    }
     
     public ObservableList<medicineData> addMedicinesListData() {
-        
         String sql = "SELECT * FROM medicine";
         
-       ObservableList<medicineData> listData = FXCollections.observableArrayList();
-       
+        ObservableList<medicineData> listData = FXCollections.observableArrayList();
+        
         connect = Database.connectDb();
-       
-       try {
+        
+        try {
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
             
             medicineData medData;
-
             while (result.next()) {
-            medData = new medicineData(result.getInt("medicine_id"), result.getString("brand")
-                    ,result.getString("productName"), result.getString("type")
-                    ,result.getString("status"), result.getDouble("price")
-                    ,result.getString("image"), result.getDate("date"));
-            
-            
-            listData.add(medData);
-            
-}
-            
-       }catch (Exception e) {e.printStackTrace(); }
+                medData = new medicineData(result.getInt("medicine_id"), result.getString("brand")
+                        ,result.getString("productName"), result.getString("type")
+                        ,result.getString("status"), result.getDouble("price")
+                        ,result.getString("image"), result.getDate("date"));
+                listData.add(medData);
+            }
+        }catch (Exception e) {e.printStackTrace(); }
         return listData;
-       
-}
+    }
     
     private ObservableList<medicineData> addMedicineList;
-
-         public void addMedicineShowListData() {
-          addMedicineList = addMedicinesListData();
-          
-          addmedicine_co_medicineID.setCellValueFactory(new PropertyValueFactory<>("medicineId"));
-          addmedicine_co_brandName.setCellValueFactory(new PropertyValueFactory<>("brand"));
-          addmedicine_co_productsName.setCellValueFactory(new PropertyValueFactory<>("productName"));
-          addmedicine_co_type.setCellValueFactory(new PropertyValueFactory<>("type"));
-          addmedicine_co_price.setCellValueFactory(new PropertyValueFactory<>("status"));
-          addmedicine_co_status.setCellValueFactory(new PropertyValueFactory<>("price"));
-          addmedicine_co_date.setCellValueFactory(new PropertyValueFactory<>("date"));
-          
-          addMedicine_tableView.setItems(addMedicineList);
-          
-}
-         
-    @FXML
-          public void addMedicineSearch(){
+    
+    public void addMedicineShowListData() {
+        addMedicineList = addMedicinesListData();
         
+        addmedicine_co_medicineID.setCellValueFactory(new PropertyValueFactory<>("medicineId"));
+        addmedicine_co_brandName.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        addmedicine_co_productsName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        addmedicine_co_type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        addmedicine_co_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        addmedicine_co_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+        addmedicine_co_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        
+        addMedicine_tableView.setItems(addMedicineList);
+    }
+    
+    @FXML
+    public void addMedicineSearch(){
         FilteredList<medicineData> filter = new FilteredList<>(addMedicineList, e-> true);
         
         addmedicine_search.textProperty().addListener((Observable, oldValue, newValue) ->{
-            
             filter.setPredicate(predicateMedicineData ->{
-                
                 if(newValue == null || newValue.isEmpty()){
                     return true;
                 }
@@ -587,7 +527,7 @@ public class DashboardController implements Initializable {
                     return true;
                 }else if(predicateMedicineData.getStatus().toLowerCase().contains(searchKey)){
                     return true;
-                }else if(predicateMedicineData.getPrice().toString().contains(searchKey)){
+                }else if(String.valueOf(predicateMedicineData.getPrice()).contains(searchKey)){
                     return true;
                 }else if(predicateMedicineData.getDate().toString().contains(searchKey)){
                     return true;
@@ -596,17 +536,12 @@ public class DashboardController implements Initializable {
         });
         
         SortedList<medicineData> sortList = new SortedList<>(filter);
-        
         sortList.comparatorProperty().bind(addMedicine_tableView.comparatorProperty());
         addMedicine_tableView.setItems(sortList);
-        
     }
-         
-         
     
     @FXML
     public void addMedicineSelect(){
-        
         medicineData medData = addMedicine_tableView.getSelectionModel().getSelectedItem();
         int num = addMedicine_tableView.getSelectionModel().getSelectedIndex();
         if ((num - 1) < -1) {return;}
@@ -617,15 +552,14 @@ public class DashboardController implements Initializable {
         addmedicine_price.setText(String.valueOf(medData.getPrice()));
         
         String uri = "file:" + medData.getImage();
-                
-                image = new Image(uri, 113, 153, false, true);
-                addmedicine_imageView.setImage(image);
+        image = new Image(uri, 113, 153, false, true);
+        addmedicine_imageView.setImage(image);
         
-                getData.path = medData.getImage();
-    
+        getData.path = medData.getImage();
     }
     
     private double totalP;
+    
     @FXML
     public void purchaseAdd(){
         purchaseCustomerId();
@@ -648,13 +582,12 @@ public class DashboardController implements Initializable {
                 alert.setContentText("Please fill all blank fields");
                 alert.showAndWait();
             }else{
-                
                 prepare = connect.prepareStatement(sql);
                 prepare.setString(1, String.valueOf(customerId));
                 prepare.setString(2, (String)purches_type.getSelectionModel().getSelectedItem());
                 prepare.setString(3, (String)purches_medicineID.getSelectionModel().getSelectedItem());
                 prepare.setString(4, (String)purches_brand.getSelectionModel().getSelectedItem());
-                prepare.setString(5, (String)purches_productName .getSelectionModel().getSelectedItem());
+                prepare.setString(5, (String)purches_productName.getSelectionModel().getSelectedItem());
                 prepare.setString(6, String.valueOf(qty));
                 
                 String checkData = "SELECT price FROM medicine WHERE medicine_id = '"
@@ -681,14 +614,12 @@ public class DashboardController implements Initializable {
                 purchaseDisplayTotal();
             }
             
-            prepare = connect.prepareStatement(sql);
         }catch(Exception e){e.printStackTrace();}
     }
     
+    private double totalPriceD;
     
-           private double totalPriceD;
-           public void purchaseDisplayTotal(){
-        
+    public void purchaseDisplayTotal(){
         String sql = "SELECT SUM(price) FROM customer WHERE customer_id = '"+customerId+"'";
         
         connect = Database.connectDb();
@@ -703,15 +634,13 @@ public class DashboardController implements Initializable {
             purches_total.setText("$" + String.valueOf(totalPriceD));
             
         }catch(Exception e){e.printStackTrace();}
-        
     }
-    
     
     private double balance;
     private double amount;
+    
     @FXML
     public void purchaseAmount(){
-        
         if(purches_amount.getText().isEmpty() || totalPriceD == 0){
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
@@ -724,15 +653,13 @@ public class DashboardController implements Initializable {
                 purches_amount.setText("");
             }else{
                 balance = (amount - totalPriceD);
-                
                 purches_balance.setText("$"+String.valueOf(balance));
             }
         }
-        
     } 
-           
+    
     @FXML
-        public void purchasePay(){
+    public void purchasePay(){
         purchaseCustomerId();
         String sql = "INSERT INTO customer_info (customer_id, total, date) "
                 + "VALUES(?,?,?)";
@@ -754,49 +681,93 @@ public class DashboardController implements Initializable {
                 Optional<ButtonType> option = alert.showAndWait();
                 
                 if(option.get().equals(ButtonType.OK)){
-                
                     prepare = connect.prepareStatement(sql);
                     prepare.setString(1, String.valueOf(customerId));
                     prepare.setString(2, String.valueOf(totalPriceD));
-
                     Date date = new Date();
                     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
                     prepare.setString(3, String.valueOf(sqlDate));
-
                     prepare.executeUpdate();
-
+                    
+                    String receiptContent = generateReceipt();
+                    File receiptFile = new File("receipt_" + customerId + "_" + sqlDate + ".txt");
+                    try (FileWriter writer = new FileWriter(receiptFile)) {
+                        writer.write(receiptContent);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        alert = new Alert(AlertType.ERROR);
+                        alert.setHeaderText(null);
+                        alert.setContentText("Failed to generate receipt file!");
+                        alert.showAndWait();
+                    }
+                    
+                    if (receiptFile.exists()) {
+                        try {
+                            Desktop.getDesktop().open(receiptFile);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            alert = new Alert(AlertType.ERROR);
+                            alert.setHeaderText(null);
+                            alert.setContentText("Failed to open receipt file!");
+                            alert.showAndWait();
+                        }
+                    }
+                    
                     alert = new Alert(AlertType.INFORMATION);
                     alert.setHeaderText(null);
-                    alert.setContentText("Successful!");
+                    alert.setContentText("Successful! Receipt generated.");
                     alert.showAndWait();
                     
                     purches_amount.setText("");
                     purches_balance.setText("$0.0");
                 }
             }
-            
         }catch(Exception e){e.printStackTrace();}
-        
     }
     
+    private String generateReceipt() {
+        StringBuilder receipt = new StringBuilder();
+        receipt.append("===== Pharmacy Receipt =====\n");
+        receipt.append("Customer ID: ").append(customerId).append("\n");
+        receipt.append("Date: ").append(new Date()).append("\n");
+        receipt.append("----------------------------\n");
+        receipt.append("Items Purchased:\n");
+        
+        String sql = "SELECT * FROM customer WHERE customer_id = '" + customerId + "'";
+        try {
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            while (result.next()) {
+                receipt.append("Medicine ID: ").append(result.getString("medicine_id")).append("\n");
+                receipt.append("Type: ").append(result.getString("type")).append("\n");
+                receipt.append("Brand: ").append(result.getString("brand")).append("\n");
+                receipt.append("Product Name: ").append(result.getString("productName")).append("\n");
+                receipt.append("Quantity: ").append(result.getInt("quantity")).append("\n");
+                receipt.append("Price: $").append(result.getDouble("price")).append("\n");
+                receipt.append("----------------------------\n");
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        
+        receipt.append("Total: $").append(totalPriceD).append("\n");
+        receipt.append("Amount Paid: $").append(amount).append("\n");
+        receipt.append("Balance: $").append(balance).append("\n");
+        receipt.append("===== Thank You! =====");
+        return receipt.toString();
+    }
     
+    private SpinnerValueFactory<Integer> spinner;
     
-    
-        private SpinnerValueFactory<Integer> spinner;
-        public void purchaseShowValue(){
+    public void purchaseShowValue(){
         spinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 20, 0);
         purchase_quantity.setValueFactory(spinner);
-              }
+    }
     
     private int qty;
+    
     @FXML
     public void purchaseQuantity(){
         qty = purchase_quantity.getValue();
     }
-    
-    
-    
-    
     
     public ObservableList<customerData> purchaseListData(){
         purchaseCustomerId();
@@ -818,16 +789,14 @@ public class DashboardController implements Initializable {
                         , result.getString("brand"), result.getString("productName")
                         , result.getInt("quantity"), result.getDouble("price")
                         , result.getDate("date"));
-                
                 listData.add(customerD); 
             }
-            
         }catch(Exception e){e.printStackTrace();}
         return listData;
     }
     
-    
     private ObservableList<customerData> purchaseList;
+    
     public void purchaseShowListData(){
         purchaseList = purchaseListData();
         
@@ -839,16 +808,11 @@ public class DashboardController implements Initializable {
         purches_co_price.setCellValueFactory(new PropertyValueFactory<>("price"));
         
         purches_tableView.setItems(purchaseList); 
-        
     } 
     
-    
-    
-    
-    
     private int customerId;
+    
     public void purchaseCustomerId(){
-        
         String sql = "SELECT customer_id FROM customer";
         
         connect = Database.connectDb();
@@ -875,17 +839,12 @@ public class DashboardController implements Initializable {
             }else if(cID == customerId){
                 customerId = cID+1;
             }
-            
         }catch(Exception e){e.printStackTrace();}
-        
     }
-    
     
     @FXML
     public void purchaseType(){
-        
         String sql = "SELECT type FROM medicine WHERE status = 'Available'";
-        
         
         connect = Database.connectDb();
         
@@ -901,15 +860,11 @@ public class DashboardController implements Initializable {
             purches_type.setItems(listData);
             
             purchaseMedicineId();
-            
         }catch(Exception e){e.printStackTrace();}
-        
     }
-    
     
     @FXML
     public void purchaseMedicineId(){
-        
         String sql = "SELECT * FROM medicine WHERE type = '"
                 +purches_type.getSelectionModel().getSelectedItem()+"'";
         
@@ -930,10 +885,8 @@ public class DashboardController implements Initializable {
         }catch(Exception e){e.printStackTrace();}
     }
     
-    
     @FXML
     public void purchaseBrand(){
-        
         String sql = "SELECT * FROM medicine WHERE medicine_id = '"
                 +purches_medicineID.getSelectionModel().getSelectedItem()+"'";
         
@@ -951,17 +904,13 @@ public class DashboardController implements Initializable {
             purches_brand.setItems(listData);
             
             purchaseProductName();
-            
         }catch(Exception e){e.printStackTrace();}
-        
     }
-    
     
     @FXML
     public void purchaseProductName(){
-        
         String sql = "SELECT * FROM medicine WHERE brand = '"
-                +purches_brand .getSelectionModel().getSelectedItem()+"'";
+                +purches_brand.getSelectionModel().getSelectedItem()+"'";
         
         connect = Database.connectDb();
         
@@ -976,136 +925,111 @@ public class DashboardController implements Initializable {
             }
             purches_productName.setItems(listData);
         }catch(Exception e){e.printStackTrace();}
-        
     }
-    
-    
     
     @FXML
     public void switchForm( ActionEvent event ){
         if(event.getSource()== dashboard_btn){
-           dashboard_form.setVisible(true);
-           addmedicine_form.setVisible(false);
-           purches_from.setVisible(false);
-           
-           dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
-           addMed_btn.setStyle("-fx-background-color:transparent");
-           purchase_btn.setStyle("-fx-background-color:transparent");
-           
-           homeChart();
-           homeAM();
-           homeTI();
-           homeTC();
-
-           
-           
+            dashboard_form.setVisible(true);
+            addmedicine_form.setVisible(false);
+            purches_from.setVisible(false);
+            
+            dashboard_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
+            addMed_btn.setStyle("-fx-background-color:transparent");
+            purchase_btn.setStyle("-fx-background-color:transparent");
+            
+            homeChart();
+            homeAM();
+            homeTI();
+            homeTC();
         }else if(event.getSource()== addMed_btn){
-            
             dashboard_form.setVisible(false);
-           addmedicine_form.setVisible(true);
-           purches_from.setVisible(false);
-           
-           addMed_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
-           dashboard_btn.setStyle("-fx-background-color:transparent");
-           purchase_btn.setStyle("-fx-background-color:transparent");
-           
-           addMedicineShowListData();
-           addMedicineListStatus();
-           addMedicineListType();
-           addMedicineSearch();
-        
+            addmedicine_form.setVisible(true);
+            purches_from.setVisible(false);
+            
+            addMed_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a41c);");
+            dashboard_btn.setStyle("-fx-background-color:transparent");
+            purchase_btn.setStyle("-fx-background-color:transparent");
+            
+            addMedicineShowListData();
+            addMedicineListStatus();
+            addMedicineListType();
+            addMedicineSearch();
         }else if(event.getSource()== purchase_btn){
-            
             dashboard_form.setVisible(false);
-           addmedicine_form.setVisible(false);
-           purches_from.setVisible(true);
-           
-           purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
-           dashboard_btn.setStyle("-fx-background-color:transparent");
-           addMed_btn.setStyle("-fx-background-color:transparent");
-           
-           purchaseType();
-           purchaseMedicineId();
-           purchaseBrand();
-           purchaseProductName();
-           purchaseShowListData();
-           purchaseShowValue();
-           purchaseDisplayTotal();
-        
+            addmedicine_form.setVisible(false);
+            purches_from.setVisible(true);
+            
+            purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a41c);");
+            dashboard_btn.setStyle("-fx-background-color:transparent");
+            addMed_btn.setStyle("-fx-background-color:transparent");
+            
+            purchaseType();
+            purchaseMedicineId();
+            purchaseBrand();
+            purchaseProductName();
+            purchaseShowListData();
+            purchaseShowValue();
+            purchaseDisplayTotal();
         }
-    
     }
-
+    
     public void displayUsername(){
-     
         String user = getData.username;
-        
         username.setText(user.substring(0, 1).toUpperCase() + user.substring(1));
-        
     }
     
     private double x = 0;
     private double y = 0;
-
+    
     @FXML
-    public void logout() {
-
+    public void logout(){
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Message");
-            alert.setHeaderText(null);
-            alert.setContentText("Are you sure you want to logout?");
+            alert.setHeaderText("Are you sure you want to logout?");
             Optional<ButtonType> option = alert.showAndWait();
-
+            
             if (option.get().equals(ButtonType.OK)) {
-                
                 logout_btn.getScene().getWindow().hide();
                 
                 Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-
                 
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
-
+                
                 root.setOnMousePressed((MouseEvent event) -> {
                     x = event.getSceneX();
                     y = event.getScreenY();
-
                 });
-
+                
                 root.setOnMouseDragged((MouseEvent event) -> {
                     stage.setX(event.getScreenX() - x);
                     stage.setY(event.getScreenY() - y);
-
                     stage.setOpacity(.8);
                 });
-
+                
                 root.setOnMouseReleased((MouseEvent event) -> {
-
                     stage.setOpacity(1);
                 });
                 stage.initStyle(StageStyle.TRANSPARENT);
-
                 stage.setScene(scene);
                 stage.show();
             }
-
         } catch (Exception e) {e.printStackTrace();}
     }
-
-    
     
     @FXML
     public void minimize() {
         Stage stage = (Stage) main_form.getScene().getWindow();
         stage.setIconified(true);
     }
-
+    
     @FXML
     public void close() {
         System.exit(0);
     }
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         displayUsername(); 
@@ -1114,7 +1038,6 @@ public class DashboardController implements Initializable {
         homeAM();
         homeTI();
         homeTC();
-        
         
         addMedicineShowListData();
         addMedicineListStatus();
@@ -1127,8 +1050,81 @@ public class DashboardController implements Initializable {
         purchaseShowListData();
         purchaseShowValue();
         purchaseDisplayTotal();
-
     }
 
+ @FXML
+private void searchBTN(ActionEvent event) {
+    String searchKey = addmedicine_search.getText().trim();
+    ObservableList<medicineData> searchResults = FXCollections.observableArrayList();
+    
+    // If search field is empty, show all medicines
+    String sql = searchKey.isEmpty() 
+        ? "SELECT * FROM medicine"
+        : "SELECT * FROM medicine WHERE productName LIKE ?";
+    
+    connect = Database.connectDb();
+    
+    try {
+        prepare = connect.prepareStatement(sql);
+        
+        // If searchKey is not empty, set the LIKE parameter
+        if (!searchKey.isEmpty()) {
+            prepare.setString(1, "%" + searchKey + "%"); // Use LIKE for partial matches
+        }
+        
+        result = prepare.executeQuery();
+        
+        medicineData medData;
+        while (result.next()) {
+            medData = new medicineData(
+                result.getInt("medicine_id"),
+                result.getString("brand"),
+                result.getString("productName"),
+                result.getString("type"),
+                result.getString("status"),
+                result.getDouble("price"),
+                result.getString("image"),
+                result.getDate("date")
+            );
+            searchResults.add(medData);
+        }
+        
+        // Update table with search results
+        addmedicine_co_medicineID.setCellValueFactory(new PropertyValueFactory<>("medicineId"));
+        addmedicine_co_brandName.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        addmedicine_co_productsName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        addmedicine_co_type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        addmedicine_co_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        addmedicine_co_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+        addmedicine_co_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        
+        addMedicine_tableView.setItems(searchResults);
+        
+        // Show alert if no results are found and searchKey is not empty
+        if (searchResults.isEmpty() && !searchKey.isEmpty()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Search Result");
+            alert.setHeaderText(null);
+            alert.setContentText("No medicine found with name: " + searchKey);
+            alert.showAndWait();
+        }
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Error occurred while searching. Please try again.");
+        alert.showAndWait();
+    } finally {
+        // Close database resources
+        try {
+            if (result != null) result.close();
+            if (prepare != null) prepare.close();
+            if (connect != null) connect.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
-   
+}

@@ -130,7 +130,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="addmedicine_form" layoutX="63.0" layoutY="45.0" prefHeight="554.4" prefWidth="900.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="addmedicine_form" layoutX="63.0" layoutY="45.0" prefHeight="554.4" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="218.0" prefWidth="874.0" stylesheets="@dashboardDesign.css">
                                  <styleClass>
@@ -192,7 +192,7 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TextField fx:id="addmedicine_search" layoutX="14.0" layoutY="14.0" onKeyTyped="#addMedicineSearch" prefHeight="23.0" prefWidth="193.0" promptText="Search" styleClass="search" stylesheets="@dashboardDesign.css">
+                                    <TextField fx:id="addmedicine_search" layoutX="14.0" layoutY="14.0" onAction="#searchBTN" onKeyTyped="#addMedicineSearch" prefHeight="23.0" prefWidth="193.0" promptText="Search" styleClass="search" stylesheets="@dashboardDesign.css">
                                        <font>
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
@@ -204,8 +204,8 @@
                                         <TableColumn fx:id="addmedicine_co_brandName" prefWidth="149.59994506835938" text="Brand Name" />
                                           <TableColumn fx:id="addmedicine_co_productsName" prefWidth="142.39996337890625" text="Product Name" />
                                           <TableColumn fx:id="addmedicine_co_type" prefWidth="128.79998779296875" text="Type" />
-                                          <TableColumn fx:id="addmedicine_co_price" prefWidth="108.0" text="Price ($)" />
-                                          <TableColumn fx:id="addmedicine_co_status" prefWidth="102.4000244140625" text="Status" />
+                                          <TableColumn fx:id="addmedicine_co_price" prefWidth="108.0" text="Status" />
+                                          <TableColumn fx:id="addmedicine_co_status" prefWidth="102.4000244140625" text="Price ($)" />
                                           <TableColumn fx:id="addmedicine_co_date" prefWidth="125.5999755859375" text="Date" />
                                       </columns>
                                     </TableView>
@@ -303,7 +303,7 @@
                               </TableView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="dashboard_form" layoutX="187.0" layoutY="167.0" prefHeight="558.4" prefWidth="905.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="dashboard_form" layoutX="187.0" layoutY="167.0" prefHeight="558.4" prefWidth="905.6" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="339.0" prefWidth="874.0" stylesheets="@dashboardDesign.css">
                                  <children>

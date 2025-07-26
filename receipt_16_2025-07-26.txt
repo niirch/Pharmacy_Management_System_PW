@@ -1,0 +1,16 @@
+===== Pharmacy Receipt =====
+Customer ID: 16
+Date: Sat Jul 26 12:39:02 BDT 2025
+----------------------------
+Items Purchased:
+Medicine ID: 2
+Type: Albuterol
+Brand: Green Power
+Product Name: Natural Healing
+Quantity: 2
+Price: $30.0
+----------------------------
+Total: $30.0
+Amount Paid: $40.0
+Balance: $10.0
+===== Thank You! =====
