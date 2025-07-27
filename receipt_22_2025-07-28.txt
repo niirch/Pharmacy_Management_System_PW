@@ -1,0 +1,16 @@
+===== Pharmacy Receipt =====
+Customer ID: 22
+Date: Mon Jul 28 00:37:03 BDT 2025
+----------------------------
+Items Purchased:
+Medicine ID: 5
+Type: Albuterol
+Brand: Shuvro Limited
+Product Name: Inhalar
+Quantity: 20
+Price: $2000.0
+----------------------------
+Total: $2000.0
+Amount Paid: $2000.0
+Balance: $0.0
+===== Thank You! =====

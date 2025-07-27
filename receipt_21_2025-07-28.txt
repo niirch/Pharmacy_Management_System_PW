@@ -1,0 +1,23 @@
+===== Pharmacy Receipt =====
+Customer ID: 21
+Date: Mon Jul 28 00:35:57 BDT 2025
+----------------------------
+Items Purchased:
+Medicine ID: 3
+Type: Aceclofenac
+Brand: Pristine Pharma
+Product Name: Chlorazole
+Quantity: 17
+Price: $340.0
+----------------------------
+Medicine ID: 4
+Type: Magnesium Hydroxide
+Brand: Jayson Pharma
+Product Name: Magnason 
+Quantity: 12
+Price: $600.0
+----------------------------
+Total: $940.0
+Amount Paid: $1000.0
+Balance: $60.0
+===== Thank You! =====

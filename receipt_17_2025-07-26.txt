@@ -1,0 +1,16 @@
+===== Pharmacy Receipt =====
+Customer ID: 17
+Date: Sat Jul 26 13:11:51 BDT 2025
+----------------------------
+Items Purchased:
+Medicine ID: 4
+Type: Albuterol
+Brand: Aloevera
+Product Name: Healthy
+Quantity: 2
+Price: $40.0
+----------------------------
+Total: $40.0
+Amount Paid: $50.0
+Balance: $10.0
+===== Thank You! =====

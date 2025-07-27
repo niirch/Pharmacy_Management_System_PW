@@ -428,7 +428,7 @@ public class DashboardController implements Initializable {
         getData.path = "";
     }
     
-    private String[] addMedicineListT = {"Hydrocodone", "Antibiotics", "Metformin", "Losartan", "Albuterol"};
+    private String[] addMedicineListT = {"Paracetamol", "Omeprazole", "Aceclofenac", "Magnesium Hydroxide", "Albuterol"};
     
     @FXML
     public void addMedicineListType() {
@@ -947,7 +947,7 @@ public class DashboardController implements Initializable {
             addmedicine_form.setVisible(true);
             purches_from.setVisible(false);
             
-            addMed_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a41c);");
+            addMed_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
             dashboard_btn.setStyle("-fx-background-color:transparent");
             purchase_btn.setStyle("-fx-background-color:transparent");
             
@@ -960,7 +960,7 @@ public class DashboardController implements Initializable {
             addmedicine_form.setVisible(false);
             purches_from.setVisible(true);
             
-            purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a41c);");
+            purchase_btn.setStyle("-fx-background-color:linear-gradient(to bottom right, #41b170, #8a418c);");
             dashboard_btn.setStyle("-fx-background-color:transparent");
             addMed_btn.setStyle("-fx-background-color:transparent");
             
@@ -1050,26 +1050,32 @@ public class DashboardController implements Initializable {
         purchaseShowListData();
         purchaseShowValue();
         purchaseDisplayTotal();
+        
     }
 
- @FXML
+ 
+@FXML
 private void searchBTN(ActionEvent event) {
     String searchKey = addmedicine_search.getText().trim();
     ObservableList<medicineData> searchResults = FXCollections.observableArrayList();
     
-    // If search field is empty, show all medicines
+    // Show all medicines if search field is empty; otherwise, search across multiple fields
     String sql = searchKey.isEmpty() 
         ? "SELECT * FROM medicine"
-        : "SELECT * FROM medicine WHERE productName LIKE ?";
+        : "SELECT * FROM medicine WHERE medicine_id LIKE ? OR brand LIKE ? OR productName LIKE ? OR type LIKE ?";
     
     connect = Database.connectDb();
     
     try {
         prepare = connect.prepareStatement(sql);
         
-        // If searchKey is not empty, set the LIKE parameter
+        // If searchKey is not empty, set the LIKE parameters for multiple fields
         if (!searchKey.isEmpty()) {
-            prepare.setString(1, "%" + searchKey + "%"); // Use LIKE for partial matches
+            String likePattern = "%" + searchKey + "%";
+            prepare.setString(1, likePattern); // medicine_id
+            prepare.setString(2, likePattern); // brand
+            prepare.setString(3, likePattern); // productName
+            prepare.setString(4, likePattern); // type
         }
         
         result = prepare.executeQuery();
@@ -1100,12 +1106,12 @@ private void searchBTN(ActionEvent event) {
         
         addMedicine_tableView.setItems(searchResults);
         
-        // Show alert if no results are found and searchKey is not empty
+        // Show alert if no medicines are found and searchKey is not empty
         if (searchResults.isEmpty() && !searchKey.isEmpty()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Search Result");
             alert.setHeaderText(null);
-            alert.setContentText("No medicine found with name: " + searchKey);
+            alert.setContentText("No medicine found matching: " + searchKey);
             alert.showAndWait();
         }
         
@@ -1126,5 +1132,10 @@ private void searchBTN(ActionEvent event) {
             e.printStackTrace();
         }
     }
+}
+    @FXML
+private void addMedicineClear(ActionEvent event) {
+    System.out.println("Clear button clicked");
+    addMedicineReset();
 }
 }

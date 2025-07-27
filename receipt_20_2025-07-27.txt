@@ -1,0 +1,44 @@
+===== Pharmacy Receipt =====
+Customer ID: 20
+Date: Sun Jul 27 18:27:48 BDT 2025
+----------------------------
+Items Purchased:
+Medicine ID: 3
+Type: Aceclofenac
+Brand: Pristine Pharma
+Product Name: Chlorazole
+Quantity: 2
+Price: $40.0
+----------------------------
+Medicine ID: 1
+Type: Paracetamol
+Brand: Ace
+Product Name: Napa
+Quantity: 4
+Price: $40.0
+----------------------------
+Medicine ID: 3
+Type: Aceclofenac
+Brand: Pristine Pharma
+Product Name: Chlorazole
+Quantity: 3
+Price: $60.0
+----------------------------
+Medicine ID: 4
+Type: Magnesium Hydroxide
+Brand: Jayson Pharma
+Product Name: Magnason 
+Quantity: 5
+Price: $250.0
+----------------------------
+Medicine ID: 5
+Type: Albuterol
+Brand: Shuvro Limited
+Product Name: Inhalar
+Quantity: 6
+Price: $600.0
+----------------------------
+Total: $990.0
+Amount Paid: $1000.0
+Balance: $10.0
+===== Thank You! =====
